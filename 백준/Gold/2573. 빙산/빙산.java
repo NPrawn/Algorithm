@@ -20,17 +20,7 @@ public class Main {
         }
     }
 
-    //빙산 덩이 카운트
-    public static int countIsland(){
-        ct = 0;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (vis[i][j] || board[i][j] == 0) continue;
-                bfs();
-            }
-        }
-        return ct;
-    }
+
 
     //bfs
     public static void bfs() {
@@ -100,7 +90,8 @@ public class Main {
             amount = new int[n][m];
             vis = new boolean[n][m];
             //분리 or 전부 없어지면 break
-            countIsland();
+            ct = 0;
+            bfs();
             if (ct == 0) {
                 bw.write("0\n");
                 break;
@@ -110,11 +101,6 @@ public class Main {
             }
             melt();
             year++;
-        }
-
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-            }
         }
 
         br.close();
