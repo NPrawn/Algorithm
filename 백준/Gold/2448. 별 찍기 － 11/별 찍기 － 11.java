@@ -13,14 +13,8 @@ public class Main {
         if (n == 3) {
             for (int i = a; i < a + 3; i++) {
                 for (int j = b - 2; j < b + 3; j++) {
-                    if (i == a && j != b) {
-                        board[i][j] = ' ';
-                        continue;
-                    }
-                    if (i == a + 1 && !(j == b - 1 || j == b + 1)) {
-                        board[i][j] = ' ';
-                        continue;
-                    }
+                    if (i == a && j != b) continue;
+                    if (i == a + 1 && !(j == b - 1 || j == b + 1)) continue;
                     board[i][j] = '*';
                 }
             }
