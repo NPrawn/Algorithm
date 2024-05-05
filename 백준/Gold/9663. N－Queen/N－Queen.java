@@ -3,11 +3,9 @@ import java.io.*;
 public class Main {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static int cnt = 0;
-    static int n;
-    static boolean[] isused1;
-    static boolean[] isused2;
-    static boolean[] isused3;
+    static StringBuilder sb = new StringBuilder();
+    static int n, cnt = 0;
+    static boolean[] isused1, isused2, isused3;
 
     public static void func(int cur) {
         if (cur == n) {
@@ -29,7 +27,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        n = Integer.parseInt(br.readLine());
+        n = toInt(br.readLine());
         isused1 = new boolean[n];
         isused2 = new boolean[n * 2];
         isused3 = new boolean[n * 2];
@@ -39,5 +37,9 @@ public class Main {
 
         br.close();
         bw.close();
+    }
+
+    public static int toInt(String s) {
+        return Integer.parseInt(s);
     }
 }
