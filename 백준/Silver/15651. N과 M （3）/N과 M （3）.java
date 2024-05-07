@@ -28,7 +28,6 @@ public class Main {
 
         bw.write(sb.toString());
 
-        br.close();
         bw.close();
     }
 
