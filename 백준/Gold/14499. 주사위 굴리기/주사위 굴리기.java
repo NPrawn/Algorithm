@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.StringTokenizer;
 
 public class Main {
-    static int n, m, x, y, k, idx = 1;
+    static int n, m, x, y, k;
     static int[][] map;
     static int[] dx = {0, 0, 0, -1, 1};
     static int[] dy = {0, 1, -1, 0, 0};
@@ -39,7 +39,6 @@ public class Main {
                 val[3] = val[1];
                 val[1] = val[2];
                 val[2] = temp;
-                return;
         }
     }
 
@@ -56,7 +55,8 @@ public class Main {
             val[1] = map[nx][ny];
             map[nx][ny] = 0;
         }
-        sb.append(val[0] + "\n");
+        sb.append(val[0]);
+        sb.append("\n");
     }
 
     static class Node {
