@@ -5,8 +5,8 @@ Each directory is organized by platform, and the solutions are written with clea
 
 ## Languages Used
 
--   Python (main language)
--   Java (some problems)
+-   Python
+-   Java
 
 ## Purpose
 
