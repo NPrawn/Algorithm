@@ -1,35 +1,21 @@
 m, n = map(int, input().split())
 t = int(input())
-horizon = []
-vertical = []
+x_cuts = [0, m]
+y_cuts = [0, n]
 
 for _ in range(t):
 	a, b = map(int, input().split())
-	if a==1: horizon.append(b)
-	else: vertical.append(b)
+	if a==1: x_cuts.append(b)
+	else: y_cuts.append(b)
 
-horizon.sort()
-vertical.sort()
+x_cuts.sort()
+y_cuts.sort()
 
-st = m
-res1 = []
-while horizon:
-	now = horizon.pop()
-	res1.append(st-now)
-	st = now
-res1.append(st)
+mx1 = 0
+mx2 = 0
+for a, b in zip(x_cuts[:-1], x_cuts[1:]):
+	mx1 = max(mx1, b-a)
+for a, b in zip(y_cuts[:-1], y_cuts[1:]):
+	mx2 = max(mx2, b-a)
 
-st = n
-res2 = []
-while vertical:
-	now = vertical.pop()
-	res2.append(st-now)
-	st = now
-res2.append(st)
-
-ans = 0
-for a in res1:
-	for b in res2:
-		ans = max(ans, a*b)
-
-print(ans)
+print(mx1*mx2)
