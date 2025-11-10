@@ -8,7 +8,12 @@ k = float('inf')
 
 for a in arr:
 	a = -a
-	l = bisect.bisect_left(arr, a)
+	st, en = -1, n-1
+	while st<en:
+		mid = (st+en+1)//2
+		if arr[mid]>=a: en = mid-1
+		else: st=mid
+	l = st+1
 	lst = []
 	if 0<l<n-1:
 		lst.append([abs(arr[l]-a), arr[l], -a])
