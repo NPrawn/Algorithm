@@ -1,4 +1,4 @@
-package A;
+package A.정수_명령_처리_6;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-public class 정수_명령_처리_6 {
+public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
