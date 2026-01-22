@@ -1,41 +1,42 @@
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static int n, m;
-    static int[] arr;
-    static boolean[] isused;
+    static boolean[] used;
+    static int[] pick;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
 
-    public static void func(int k) throws IOException {
-        if (k == m) {
+
+    static void dfs(int depth) {
+        if (depth == m) {
             for (int i = 0; i < m; i++) {
-                bw.write(arr[i] + " ");
+                sb.append(pick[i]).append(' ');
             }
-            bw.write("\n");
+            sb.append('\n');
             return;
         }
-        for (int i = 1; i <= n; i++) {
-            if (!isused[i]) {
-                arr[k] = i;
-                isused[i] = true;
-                func(k + 1);
-                isused[i] = false;
-            }
+
+        for (int x = 1; x <= n; x++) {
+            if (used[x]) continue;
+            used[x] = true;
+            pick[depth] = x;
+            dfs(depth + 1);
+            used[x] = false;
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        StringTokenizer st = new StringTokenizer(br.readLine());
+    public static void main(String[] args) throws Exception {
+        st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
         m = Integer.parseInt(st.nextToken());
-        arr = new int[n + 1];
-        isused = new boolean[n + 1];
-        func(0);
 
+        used = new boolean[n + 1];
+        pick = new int[m];
 
-        br.close();
-        bw.close();
+        dfs(0);
+        System.out.println(sb.toString());
     }
 }
