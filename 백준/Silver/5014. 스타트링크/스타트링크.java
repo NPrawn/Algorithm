@@ -1,60 +1,46 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Main {
-    public static class Pair {
-        public int x;
-        public int y;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringTokenizer st;
+    static int f,s,g,u,d;
+    static int[] dist;
 
-        public Pair(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int f = Integer.parseInt(st.nextToken());
-        int s = Integer.parseInt(st.nextToken());
-        int g = Integer.parseInt(st.nextToken());
-        int u = Integer.parseInt(st.nextToken());
-        int d = Integer.parseInt(st.nextToken());
-        Queue<Integer> que = new LinkedList<>();
-        boolean error = true;
-
-        int[] dist = new int[f + 1];
+    public static void main(String[] args) throws Exception {
+        st = new StringTokenizer(br.readLine());
+        f = Integer.parseInt(st.nextToken());
+        s = Integer.parseInt(st.nextToken());
+        g = Integer.parseInt(st.nextToken());
+        u = Integer.parseInt(st.nextToken());
+        d = Integer.parseInt(st.nextToken());
+        dist = new int[f + 1];
         Arrays.fill(dist, -1);
-        int[] board = new int[f + 1];
-        board[s] = 1;
-        int[] dx = {u, -d};
 
-        que.add(s);
+        Queue<Integer> q = new LinkedList<>();
+        q.add(s);
         dist[s] = 0;
 
-        while (!que.isEmpty()) {
-            int cur = que.poll();
-            if (cur == g) {
-                bw.write(Integer.toString(dist[cur]));
-                error = false;
+        while (!q.isEmpty()) {
+            int now = q.poll();
+            int nx = now + u;
+            if (nx <= f && dist[nx] == -1) {
+                q.add(nx);
+                dist[nx] = dist[now] + 1;
             }
-            for (int dir = 0; dir < 2; dir++) {
-                int nx = cur + dx[dir];
-                if (nx <= 0 || nx > f) continue;
-                if(dist[nx] >= 0) continue;
-                que.add(nx);
-                dist[nx] = dist[cur] + 1;
+
+            nx = now - d;
+            if (nx > 0 && dist[nx] == -1) {
+                q.add(nx);
+                dist[nx] = dist[now] + 1;
             }
         }
 
-        if (error) {
-            bw.write("use the stairs");
-        }
-
-        br.close();
-        bw.close();
-
+        System.out.println(dist[g] != -1 ? dist[g] : "use the stairs");
     }
 }
