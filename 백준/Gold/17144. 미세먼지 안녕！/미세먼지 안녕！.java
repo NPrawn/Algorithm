@@ -1,122 +1,114 @@
+import java.util.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 public class Main {
-    static int r, c, t, ans;
-    static int[][] map;
-    static ArrayList<Integer> cleaner = new ArrayList<>();
-    static int[] dx = {0, -1, 0, 1};
-    static int[] dy = {1, 0, -1, 0};
-
-    static void clean() {
-        int x = cleaner.get(0);
-        int y = 0;
-        for (int i = x; i > 0; i--) {
-            map[i][0] = map[i - 1][0];
-        }
-        for (int i = 1; i < c; i++) {
-            map[0][i - 1] = map[0][i];
-        }
-        for (int i = 1; i <= x; i++) {
-            map[i - 1][c - 1] = map[i][c - 1];
-        }
-        for (int i = c - 1; i > 0; i--) {
-            map[x][i] = map[x][i - 1];
-        }
-        map[x][y] = -1;
-        map[x][y + 1] = 0;
-        x = cleaner.get(1);
-        y = 0;
-        for (int i = x + 1; i < r; i++) {
-            map[i - 1][0] = map[i][0];
-        }
-        for (int i = 1; i < c; i++) {
-            map[r - 1][i - 1] = map[r - 1][i];
-        }
-        for (int i = r - 1; i > x; i--) {
-            map[i][c - 1] = map[i - 1][c - 1];
-        }
-        for (int i = c - 1; i > 0; i--) {
-            map[x][i] = map[x][i - 1];
-        }
-        map[x][y] = -1;
-        map[x][y + 1] = 0;
-    }
-
-    static void spread() {
-        int[][] Dust = new int[r][c];
-
-        for (int i = 0; i < r; i++) {
-            for (int j = 0; j < c; j++) {
-                if (map[i][j] > 0) {
-                    int cnt = 0; // 퍼트린 방 개수
-                    int newDust = map[i][j] / 5; // 퍼트릴 먼지양
-                    for (int idx = 0; idx < 4; idx++) {
-                        int x = i + dx[idx];
-                        int y = j + dy[idx];
-
-                        if (x < 0 || x >= r || y < 0 || y >= c) {
-                            continue;
-                        }
-
-                        if (map[x][y] == -1) {
-                            continue;
-                        }
-                        Dust[x][y] += newDust;
-                        cnt++;
-                    }
-
-                    map[i][j] -= newDust * cnt;
-                }
-
-            }
-        }
-
-        // 퍼트린 먼지 더하기
-        for (int i = 0; i < r; i++) {
-            for (int j = 0; j < c; j++) {
-                map[i][j] += Dust[i][j];
-            }
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        r = Integer.parseInt(st.nextToken());
-        c = Integer.parseInt(st.nextToken());
-        t = Integer.parseInt(st.nextToken());
-        map = new int[r][c];
-
-        for (int i = 0; i < r; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < c; j++) {
-                map[i][j] = Integer.parseInt(st.nextToken());
-                if (map[i][j] == -1) {
-                    cleaner.add(i);
-                }
-            }
-        }
-
-        for (int i = 0; i < t; i++) {
-            spread();
-            clean();
-        }
-
-        for (int i = 0; i < r; i++) {
-            for (int j = 0; j < c; j++) {
-                if (map[i][j] > 0) {
-                    ans += map[i][j];
-                }
-            }
-        }
-
-        sb.append(ans);
-        bw.write(sb.toString());
-        bw.close();
-    }
-
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
+    static int n, m, t;
+    static int[][] grid;
+    static int[] dx = {1, 0, -1, 0};
+    static int[] dy = {0, 1, 0, -1};
+
+    static class Point {
+        int x, y;
+        Point(int x, int y) {
+            this.x =x;
+            this.y =y;
+        }
+    }
+
+    public static void main(String[] args) throws Exception{
+        st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        t = Integer.parseInt(st.nextToken());
+
+        grid = new int[n][m];
+        Point up = null;
+        Point down = null;
+        for (int i = 0; i < n; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < m; j++) {
+                grid[i][j] = Integer.parseInt(st.nextToken());
+                if (grid[i][j] == -1) {
+                    if (up == null) {
+                        up = new Point(i, j);
+                    } else {
+                        down = new Point(i, j);
+                    }
+                }
+            }
+        }
+
+        while (t-- > 0) {
+            expand();
+            grid[up.x][up.y] = -1;
+            grid[down.x][down.y] = -1;
+            int x = up.x - 1;
+            int y = up.y;
+            int d = 2;
+            while (!(x == up.x && y == up.y)) {
+                int nx = x + dx[d];
+                int ny = y + dy[d];
+                if (nx < 0 || ny < 0 || nx >= n || ny >= m || nx > up.x) {
+                    d -= 1;
+                    if (d==-1) d = 3;
+                    nx = x + dx[d];
+                    ny = y + dy[d];
+                }
+                grid[x][y] = grid[nx][ny];
+                x = nx;
+                y = ny;
+            }
+            grid[up.x][up.y+1] = 0;
+
+            x = down.x + 1;
+            y = down.y;
+            d = 0;
+            while (!(x == down.x && y == down.y)) {
+                int nx = x + dx[d];
+                int ny = y + dy[d];
+                if (nx < 0 || ny < 0 || nx >= n || ny >= m || nx < down.x) {
+                    d += 1;
+                    if (d==4) d=0;
+                    nx = x + dx[d];
+                    ny = y + dy[d];
+                }
+                grid[x][y] = grid[nx][ny];
+                x = nx;
+                y = ny;
+            }
+            grid[down.x][down.y+1] = 0;
+        }
+
+        int ans = 2;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                ans += grid[i][j];
+            }
+        }
+        System.out.println(ans);
+    }
+
+    public static void expand() {
+        int[][] newgrid = new int[n][m];
+        for (int x = 0; x < n; x++) {
+            for (int y = 0; y < m; y++) {
+                if (grid[x][y] <= 0) continue;
+                int k = grid[x][y] / 5;
+                for (int d = 0; d < 4; d++) {
+                    int nx = x + dx[d];
+                    int ny = y + dy[d];
+                    if (nx < 0 || ny < 0 || nx >= n || ny >= m) continue;
+                    if (grid[nx][ny] == -1) continue;
+                    newgrid[nx][ny] += k;
+                    grid[x][y] -= k;
+                }
+                newgrid[x][y] += grid[x][y];
+            }
+        }
+        grid = newgrid;
+    }
+
 }
