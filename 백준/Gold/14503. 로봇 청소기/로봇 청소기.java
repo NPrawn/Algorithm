@@ -1,98 +1,76 @@
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    static int n, m, r, c, d, ans = 0;
-    static int[][] map;
-    static int[] dx = {1, 0, -1, 0};
-    static int[] dy = {0, -1, 0, 1};
-    static Node robot;
-    static boolean[][] vis;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
+    static int n, m;
+    static int[][] grid;
+    static int x, y, d;
+    static int[] dx = {-1, 0, 1, 0};
+    static int[] dy = {0, 1, 0, -1};
 
-    static class Node {
-        int x, y, d;
-
-        Node(int x, int y, int d) {
-            this.x = x;
-            this.y = y;
-            this.d = d;
-        }
-    }
-
-    static void rotate() {
-        robot.d--;
-        if (robot.d == -1) robot.d = 3;
-    }
-
-    static void run() {
-        while (true) {
-            if (map[robot.x][robot.y] == 0 && !vis[robot.x][robot.y]) {
-                vis[robot.x][robot.y] = true;
-                ans++;
-            }
-            boolean isVis = false;
-            for (int dir = 0; dir < 4; dir++) {
-                int nx = robot.x + dx[dir];
-                int ny = robot.y + dy[dir];
-                if (nx < 0 || ny < 0 || nx >= n || ny >= m) continue;
-                if (vis[nx][ny]) continue;
-                if (map[nx][ny] == 1) continue;
-                isVis = true;
-                break;
-            }
-            if (isVis) {
-                while (true) {
-                    rotate();
-                    int nx = robot.x - dx[robot.d];
-                    int ny = robot.y - dy[robot.d];
-                    if (nx < 0 || ny < 0 || nx >= n || ny >= m) continue;
-                    if (vis[nx][ny]) continue;
-                    if (map[nx][ny] == 1) continue;
-                    robot.x = nx;
-                    robot.y = ny;
-                    break;
-                }
-            } else {
-                int nx = robot.x + dx[robot.d];
-                int ny = robot.y + dy[robot.d];
-                if (nx < 0 || ny < 0 || nx >= n || ny >= m) return;
-                if (map[nx][ny] == 1) return;
-                robot.x = nx;
-                robot.y = ny;
-            }
-
-
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        StringTokenizer st = new StringTokenizer(br.readLine());
+    public static void main(String[] args) throws Exception{
+        st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
         m = Integer.parseInt(st.nextToken());
-        vis = new boolean[n][m];
-        map = new int[n][m];
 
         st = new StringTokenizer(br.readLine());
-        r = Integer.parseInt(st.nextToken());
-        c = Integer.parseInt(st.nextToken());
+        x = Integer.parseInt(st.nextToken());
+        y = Integer.parseInt(st.nextToken());
         d = Integer.parseInt(st.nextToken());
-        robot = new Node(r, c, d);
 
+        grid = new int[n][m];
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < m; j++) {
-                map[i][j] = Integer.parseInt(st.nextToken());
+                grid[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
-        run();
+        int ans = 0;
+        while (true) {
+            if (grid[x][y] == 0) {
+                grid[x][y] = 2;
+                ans += 1;
+            }
 
-        sb.append(ans);
-        bw.write(sb.toString());
-        bw.close();
+            if (check()) {
+                while (true) {
+                    d -= 1;
+                    if (d == -1) d = 3;
+                    int nx = x + dx[d];
+                    int ny = y + dy[d];
+                    if (nx<0 || ny<0 || nx>=n || ny>=m) continue;
+                    if (grid[nx][ny] != 0) continue;
+                    x = nx;
+                    y = ny;
+                    break;
+                }
+
+            } else {
+                int nx = x + dx[(d + 2) % 4];
+                int ny = y + dy[(d + 2) % 4];
+                if (nx<0 || ny<0 || nx>=n || ny>=m) break;
+                if (grid[nx][ny] == 1) break;
+                x = nx;
+                y = ny;
+            }
+
+        }
+
+        System.out.println(ans);
+
+    }
+    public static boolean check() {
+        for (int dir = 0; dir < 4; dir++) {
+            int nx = x + dx[dir];
+            int ny = y + dy[dir];
+            if (nx<0 || ny<0 || nx>=n || ny>=m) continue;
+            if (grid[nx][ny] == 0) return true;
+        }
+        return false;
     }
 
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static StringBuilder sb = new StringBuilder();
 }
