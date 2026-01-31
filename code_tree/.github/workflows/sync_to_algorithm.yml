@@ -1,0 +1,41 @@
+name: Sync subtree to Algorithm
+
+on:
+    push:
+        branches: ['main']
+
+concurrency:
+    group: sync-to-algorithm
+    cancel-in-progress: true
+
+jobs:
+    sync:
+        runs-on: ubuntu-latest
+
+        steps:
+            # (1) Algorithm 레포 체크아웃
+            - name: Checkout Algorithm repo
+              uses: actions/checkout@v4
+              with:
+                  repository: NPrawn/Algorithm
+                  ref: main
+                  token: ${{ secrets.ALGO_PUSH_TOKEN }}
+                  fetch-depth: 0
+
+            # (2) Codetree를 remote로 추가하고 fetch
+            - name: Add Codetree remote
+              run: |
+                  git remote add codetree https://x-access-token:${{ secrets.ALGO_PUSH_TOKEN }}@github.com/NPrawn/CodeTree.git
+                  git fetch codetree --prune
+
+            # (3) subtree pull (squash 없음)
+            - name: Subtree pull into code_tree
+              run: |
+                  git config user.name "codetree-sync-bot"
+                  git config user.email "codetree-sync-bot@users.noreply.github.com"
+
+                  git subtree pull --prefix=code_tree codetree main
+
+            # (4) 변경이 있을 때만 push
+            - name: Push
+              run: git push origin main
