@@ -29,12 +29,12 @@ jobs:
                   git fetch codetree --prune
 
             # (3) subtree pull (squash 없음)
-            - name: Subtree pull into codetree_
+            - name: Subtree pull into code_tree
               run: |
                   git config user.name "codetree-sync-bot"
                   git config user.email "codetree-sync-bot@users.noreply.github.com"
 
-                  git subtree pull --prefix=codetree_ codetree main
+                  git subtree pull --prefix=code_tree codetree main
 
             # (4) 변경이 있을 때만 push
             - name: Push if changed
