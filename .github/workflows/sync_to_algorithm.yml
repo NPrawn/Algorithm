@@ -1,48 +1,48 @@
 name: Sync subtree to Algorithm
 
 on:
-  push:
-    branches: [ "main" ]
+    push:
+        branches: ['main']
 
 concurrency:
-  group: sync-to-algorithm
-  cancel-in-progress: true
+    group: sync-to-algorithm
+    cancel-in-progress: true
 
 jobs:
-  sync:
-    runs-on: ubuntu-latest
+    sync:
+        runs-on: ubuntu-latest
 
-    steps:
-      # (1) Algorithm 레포 체크아웃
-      - name: Checkout Algorithm repo
-        uses: actions/checkout@v4
-        with:
-          repository: YOUR_GITHUB_ID/01_Algorithm
-          ref: main
-          token: ${{ secrets.ALGO_PUSH_TOKEN }}
-          fetch-depth: 0
+        steps:
+            # (1) Algorithm 레포 체크아웃
+            - name: Checkout Algorithm repo
+              uses: actions/checkout@v4
+              with:
+                  repository: NPrawn/Algorithm
+                  ref: main
+                  token: ${{ secrets.ALGO_PUSH_TOKEN }}
+                  fetch-depth: 0
 
-      # (2) Codetree를 remote로 추가하고 fetch
-      - name: Add Codetree remote
-        run: |
-          git remote add codetree https://x-access-token:${{ secrets.ALGO_PUSH_TOKEN }}@github.com/YOUR_GITHUB_ID/CodeTree.git
-          git fetch codetree --prune
+            # (2) Codetree를 remote로 추가하고 fetch
+            - name: Add Codetree remote
+              run: |
+                  git remote add codetree https://x-access-token:${{ secrets.ALGO_PUSH_TOKEN }}@github.com/NPrawn/CodeTree.git
+                  git fetch codetree --prune
 
-      # (3) subtree pull (squash 없음)
-      - name: Subtree pull into codetree_
-        run: |
-          git config user.name "codetree-sync-bot"
-          git config user.email "codetree-sync-bot@users.noreply.github.com"
+            # (3) subtree pull (squash 없음)
+            - name: Subtree pull into codetree_
+              run: |
+                  git config user.name "codetree-sync-bot"
+                  git config user.email "codetree-sync-bot@users.noreply.github.com"
 
-          git subtree pull --prefix=codetree_ codetree main
+                  git subtree pull --prefix=codetree_ codetree main
 
-      # (4) 변경이 있을 때만 push
-      - name: Push if changed
-        run: |
-          if git diff --quiet && git diff --cached --quiet; then
-            echo "No changes to push."
-            exit 0
-          fi
+            # (4) 변경이 있을 때만 push
+            - name: Push if changed
+              run: |
+                  if git diff --quiet && git diff --cached --quiet; then
+                    echo "No changes to push."
+                    exit 0
+                  fi
 
-          # subtree pull이 커밋을 만들긴 하지만, 안전하게 한 번 더 확인
-          git push origin main
+                  # subtree pull이 커밋을 만들긴 하지만, 안전하게 한 번 더 확인
+                  git push origin main
