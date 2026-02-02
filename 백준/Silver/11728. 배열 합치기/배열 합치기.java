@@ -1,46 +1,44 @@
+import java.util.*;
 import java.io.*;
-import java.util.StringTokenizer;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+    static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     static StringBuilder sb = new StringBuilder();
-    static int n, m;
-    static int[] a;
-    static int[] b;
+    static StringTokenizer st;
 
-    public static void main(String[] args) throws IOException {
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
+    public static void main(String[] args) throws Exception {
+        st = new StringTokenizer(input.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
 
-        a = new int[n];
-        b = new int[m];
-        st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < n; i++) {
-            a[i] = Integer.parseInt(st.nextToken());
+        int[] A = new int[n];
+        int[] B = new int[m];
+
+        st = new StringTokenizer(input.readLine());
+        for (int i = 0; i < n; i++)
+            A[i] = Integer.parseInt(st.nextToken());
+
+        st = new StringTokenizer(input.readLine());
+        for (int i = 0; i < m; i++)
+            B[i] = Integer.parseInt(st.nextToken());
+
+        int a = 0;
+        int b = 0;
+
+        while (true) {
+            if (a>=n && b>=m) break;
+            if (a >= n) {
+                sb.append(B[b++]);
+            } else if (b >= m) {
+                sb.append(A[a++]);
+            } else if (A[a] < B[b]) {
+                sb.append(A[a++]);
+            } else {
+                sb.append(B[b++]);
+            }
+            sb.append(" ");
         }
-        st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < m; i++) {
-            b[i] = Integer.parseInt(st.nextToken());
-        }
-
-        int[] ans = new int[n + m];
-        int idxA = 0;
-        int idxB = 0;
-
-        for (int i = 0; i < ans.length; i++) {
-            if (idxA == n) ans[i] = b[idxB++];
-            else if (idxB == m) ans[i] = a[idxA++];
-            else if (a[idxA] < b[idxB]) ans[i] = a[idxA++];
-            else if (b[idxB] < a[idxA]) ans[i] = b[idxB++];
-            else ans[i] = a[idxA++];
-        }
-
-        for (int e : ans) {
-            sb.append(e + " ");
-        }
-        bw.write(sb.toString());
-        bw.close();
+        System.out.println(sb.toString());
     }
 }
