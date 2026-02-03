@@ -22,8 +22,10 @@ while q:
         if deg[a] == 0:
             heapq.heappush(q, a)
 
-if len(ans) == n:
-    for i in range(1, n+1):
-        print(ans.index(i)+1, end=' ')
+res = [0 for _ in range(n+1)]
+if (len(ans) == n):
+    for i,a in enumerate(ans, start = 1):
+        res[a] = i
+    print(*res[1:])
 else:
     print(-1)
