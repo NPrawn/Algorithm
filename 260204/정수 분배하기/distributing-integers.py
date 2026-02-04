@@ -1,7 +1,7 @@
 n, m = map(int, input().split())
 arr = [int(input()) for _ in range(n)]
 
-l, r = 0, max(arr)
+l, r = 1, max(arr)
 
 def check(x):
     ct = 0
@@ -9,7 +9,7 @@ def check(x):
         ct += a//x
     return ct>=m
 
-ans = -float('inf')
+ans = 0
 while l<=r:
     mid = (l+r) // 2
     if check(mid):
