@@ -43,6 +43,7 @@ public class Solution {
 			}
 			if (a > b) win+=1;
 			else lose+=1;
+			return;
 		}
 		
 		for(int k=1; k<19; k++) {
