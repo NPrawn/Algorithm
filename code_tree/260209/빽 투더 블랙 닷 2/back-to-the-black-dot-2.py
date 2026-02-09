@@ -44,4 +44,4 @@ for i in range(1, n+1):
     if i==r1 or i==r2: continue
     ans = min(ans, dist + dist1[i] + dist2[i])
 
-print(ans)
+print(ans if ans!=inf else -1)
