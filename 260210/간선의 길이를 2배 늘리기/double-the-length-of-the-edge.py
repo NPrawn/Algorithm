@@ -54,6 +54,12 @@ while now != n:
         idx+=1
         if idx == len(ans): idx-=1
 
+for i in range(len(adj[en])):
+    nw = adj[en][i][0]
+    nxt = adj[en][i][1]
+    if nxt!=st: continue
+    adj[en][i][0] *= 2
+
 for i in range(len(adj[st])):
     nw = adj[st][i][0]
     nxt = adj[st][i][1]
