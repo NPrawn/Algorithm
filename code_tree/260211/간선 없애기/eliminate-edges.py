@@ -35,16 +35,17 @@ while x!=1:
     A.append(x)
 
 A.reverse()
-s = set()
-s.add(dist[n])
+ans = 0
+d = dist[n]
 for a,b in zip(A[:-1], A[1:]):
     tmp = adj[a][b]
     adj[a][b] = 0
     adj[b][a] = 0
 
     dijk()
-    s.add(dist[n])
     adj[a][b] = tmp
     adj[b][a] = tmp
+    if dist[n] == d: continue
+    ans += 1
 
-print(len(s) - 1)
+print(ans)
