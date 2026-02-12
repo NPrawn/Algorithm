@@ -12,11 +12,13 @@ def union(a, b):
     b = find(b)
     if a==b: return
 
-    if a > b:
-        a,b = b,a
 
-    p[b] = a
-    ct[a] += ct[b]
+    if a > b:
+        p[a] = b
+        ct[b] += ct[a]
+    else:
+        p[b] = a
+        ct[a] += ct[b]
 
 for _ in range(m):
     cmds = list(input().split())
