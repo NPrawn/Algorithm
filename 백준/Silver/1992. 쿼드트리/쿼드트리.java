@@ -1,52 +1,45 @@
 import java.io.*;
+import java.util.*;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static int n;
-    static int[][] board;
+	static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+	static StringBuilder sb = new StringBuilder();
+	static StringTokenizer st;
 
-    public static boolean check(int n, int a, int b) {
-        for (int i = a; i < a + n; i++) {
-            for (int j = b; j < b + n; j++) {
-                if (board[a][b] != board[i][j]) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+	static char[][] grid;
 
-    public static void func(int k,int a,int  b) throws IOException {
-        if (check(k, a, b)) {
-            bw.write(Integer.toString(board[a][b]));
-            return;
-        }
-        bw.write("(");
-        int n = k / 2;
+	public static void main(String[] args) throws Exception {
+		int n = Integer.parseInt(input.readLine());
+		grid = new char[n][n];
+		for (int i=0; i<n;i++) {
+			String str = input.readLine();
+			for (int j=0;j<n;j++) {
+				grid[i][j] = str.charAt(j);
+			}
+		}
+		System.out.println(f(0, 0, n - 1, n - 1));
+	}
 
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                func(n, a + i * n, b + j * n);
-            }
-        }
-        bw.write(")");
-    }
+	static String f(int sx, int sy, int ex, int ey) {
+		char a = grid[sx][sy];
+		boolean check = true;
+		for (int x = sx; x <= ex; x++) {
+			for (int y = sy; y <= ey; y++) {
+				if (a != grid[x][y])
+					check = false;
+			}
+		}
 
-    public static void main(String[] args) throws IOException {
-        n = Integer.parseInt(br.readLine());
-        board = new int[n][n];
-        for (int i = 0; i < n; i++) {
-            String s = br.readLine();
-            for (int j = 0; j < n; j++) {
-                board[i][j] = Character.getNumericValue(s.charAt(j));
-            }
-        }
+		if (check)
+			return String.valueOf(a);
+		int midx = (sx + ex) / 2;
+		int midy = (sy + ey) / 2;
 
-        func(n, 0, 0);
-
-
-        br.close();
-        bw.close();
-    }
+		return "("
+        + f(sx, sy, midx, midy)
+        + f(sx, midy + 1, midx, ey)
+        + f(midx + 1, sy, ex, midy)
+        + f(midx + 1, midy + 1, ex, ey)
+        + ")";
+	}
 }
