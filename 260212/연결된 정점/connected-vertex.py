@@ -13,10 +13,10 @@ def union(a, b):
     
     if a > b:
         p[a] = b
-        ct[b] += 1
+        ct[b] += ct[a]
     else:
         p[b] = a
-        ct[a] += 1
+        ct[a] += ct[b]
 
 for _ in range(m):
     cmds = list(input().split())
