@@ -1,11 +1,10 @@
 n, m = map(int, input().split())
 
 p = [i for i in range(n+1)]
-ct = [0 for _ in range(n+1)]
+ct = [1 for _ in range(n+1)]
 def find(x):
     while p[x] != x:
         x = p[x] = p[p[x]]
-    ct[x] += 1
     return x
 
 def union(a, b):
@@ -14,8 +13,10 @@ def union(a, b):
     
     if a > b:
         p[a] = b
+        ct[b] += 1
     else:
         p[b] = a
+        ct[a] += 1
 
 for _ in range(m):
     cmds = list(input().split())
