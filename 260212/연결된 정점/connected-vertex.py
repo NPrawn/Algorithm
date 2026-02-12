@@ -4,7 +4,8 @@ p = [i for i in range(n+1)]
 ct = [1 for _ in range(n+1)]
 def find(x):
     while p[x] != x:
-        x = p[x] = p[p[x]]
+        p[x] = p[p[x]]
+        x = p[x]
     return x
 
 def union(a, b):
