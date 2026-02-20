@@ -2,6 +2,7 @@ n = int(input())
 p = list(map(int, input().split()))
 x = int(input())
 s = set()
+p[x] = -2
 s.add(x)
 
 while True:
@@ -13,15 +14,14 @@ while True:
     if remove:
         for e in remove:
             s.add(e)
-            p[e] = -1
+            p[e] = -2
     else:
         break
 
-s = set()
-for i in range(n):
-    if p[i] == -1:
-        n-=1
-        continue
-    s.add(p[i])
+s = set(i for i in range(n))
+for i, a in enumerate(p):
+    if a==-2:
+        s.discard(i)
+    s.discard(a)
 
-print(n-len(s))
+print(len(s))
