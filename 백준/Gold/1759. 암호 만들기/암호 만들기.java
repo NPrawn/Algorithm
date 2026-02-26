@@ -1,73 +1,72 @@
 import java.io.*;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    static int l, c;
-    static char[] arr, ans;
-    static boolean[] isUsed;
+	static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+	static StringBuilder sb = new StringBuilder();
+	static StringTokenizer st;
 
-    static void func(int cur) {
-        if (cur == l) {
-            int ct = 0;
-            int tc = 0;
-            for (int i = 0; i < l; i++) {
-                switch (ans[i]) {
-                    case 'a': ct++;
-                        break;
-                    case 'e': ct++;
-                        break;
-                    case 'i': ct++;
-                        break;
-                    case 'o': ct++;
-                        break;
-                    case 'u': ct++;
-                        break;
-                    default: tc++;
-                        break;
-                }
-            }
-            if (ct == 0 || tc < 2) {
-                return;
-            }
-            for (int i = 0; i < l; i++) {
-                sb.append(ans[i]);
-            }
-            sb.append("\n");
-            return;
-        }
-        for (int i = 0; i < c; i++) {
-            if (isUsed[i]) continue;
-            if (cur != 0 && ans[cur - 1] > arr[i]) continue;
-            isUsed[i] = true;
-            ans[cur] = arr[i];
-            func(cur + 1);
-            isUsed[i] = false;
-        }
-    }
+	static int n, k;
+	static char[] arr;
+	static HashSet<Character> A = new HashSet<>();
+	static HashSet<Character> B = new HashSet<>();
+	static boolean[] used;
+	static char[] ans;
 
-    public static void main(String[] args) throws IOException {
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        l = Integer.parseInt(st.nextToken());
-        c = Integer.parseInt(st.nextToken());
-        arr = new char[c];
-        ans = new char[c];
-        isUsed = new boolean[c];
+	public static void main(String[] args) throws Exception {
 
-        st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < c; i++) {
-            arr[i] = st.nextToken().charAt(0);
-        }
-        Arrays.sort(arr);
+		B.add('a');
+		B.add('e');
+		B.add('i');
+		B.add('o');
+		B.add('u');
+		for (int i = 0; i < 26; i++)
+			A.add((char) ('a' + i));
+		A.removeAll(B);
+		
+		st = new StringTokenizer(input.readLine());
+		k = Integer.parseInt(st.nextToken());
+		n = Integer.parseInt(st.nextToken());
 
-        func(0);
+		String[] s = input.readLine().split(" ");
+		arr = new char[n];
+		for (int i=0; i<n; i++) {
+			arr[i] = s[i].charAt(0);
+		}
+		ans = new char[k];
+		used = new boolean[n];
+		Arrays.sort(arr);
 
-        bw.write(sb.toString());
+		dfs(0);
+		
+		System.out.println(sb.toString());
+	}
 
-        bw.close();
-    }
-
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static StringBuilder sb = new StringBuilder();
+	static void dfs(int depth) {
+		if (depth == k) {
+			String s = "";
+			for (char e : ans) {
+				s += e;
+			}
+			int ct1 = 0;
+			int ct2 = 0;
+			for (char c : s.toCharArray()) {
+				if (B.contains(c)) ct1 += 1;
+				if (A.contains(c)) ct2 += 1;
+			}
+			if (ct1 < 1) return;
+			if (ct2 < 2) return;
+			sb.append(s).append('\n');
+			return;
+		}
+		
+		for (int i=0; i<n; i++) {
+			if (used[i]) continue;
+			if (depth != 0 && ans[depth - 1] > arr[i]) continue;
+			used[i] = true;
+			ans[depth] = arr[i];
+			dfs(depth + 1);
+			used[i] = false;
+		}
+	}
 }
