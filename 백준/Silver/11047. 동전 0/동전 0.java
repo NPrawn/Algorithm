@@ -1,31 +1,27 @@
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
 
-    public static void main(String[] args) throws IOException {
-        StringTokenizer st = new StringTokenizer(br.readLine());
+    public static void main(String[] args) throws Exception {
+        st = new StringTokenizer(input.readLine());
         int n = Integer.parseInt(st.nextToken());
-        int k = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
+
         int[] arr = new int[n];
         for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(br.readLine());
-        }
-        int sum = 0;
-        n--;
-        while (true) {
-            if (k == 0) {
-                break;
-            }
-            sum += k / arr[n];
-            k %= arr[n--];
+            arr[i] = Integer.parseInt(input.readLine());
         }
 
-        sb.append(sum);
-        bw.write(sb.toString());
-        bw.close();
+        int ans = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            ans += m / arr[i];
+            m %= arr[i];
+        }
+
+        System.out.println(ans);
     }
 }
