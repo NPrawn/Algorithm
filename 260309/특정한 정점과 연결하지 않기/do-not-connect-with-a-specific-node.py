@@ -23,7 +23,9 @@ for _ in range(m):
 a, b, k = map(int, input().split())
 ans = 1
 for i in range(1, n+1):
+    if k == 0: break
     if (find(i) != find(a) and find(i) != find(b)):
         ans += 1
+        k -= 1
 
 print(ans)
