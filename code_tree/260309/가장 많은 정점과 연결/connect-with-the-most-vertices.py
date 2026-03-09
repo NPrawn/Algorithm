@@ -32,13 +32,12 @@ for i in range(2, n+1):
     lst.append((arr[b] + arr[a], i))
 
 lst.sort()
-
 ans = 0
 for v, i in lst:
     a = find(1)
     b = find(i)
     if a==b: continue
-    union(1, i)
+    union(a, b)
     ans += v
 
 print(ans if ans <= k else 'NO')
