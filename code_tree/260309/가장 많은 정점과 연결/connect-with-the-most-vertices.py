@@ -32,7 +32,7 @@ for e in p[1:]:
     if a in s: continue
     s.add(a)
     ans += arr[a]
-    mx = min(mn, arr[a])
+    mn = min(mn, arr[a])
 
 if len(s) % 2 == 1:
     ans += mn
