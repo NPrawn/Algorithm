@@ -29,17 +29,18 @@ s = set()
 for i in range(1, n+1):
     a = find(i)
     if a in s: continue
+    s.add(a)
     lst.append((arr[a], i))
 
 lst.sort()
 q, now = lst[0]
-ans = q
+ans = 0
 for w, nxt in lst[1:]:
     a = find(now)
     b = find(nxt)
     if a==b: continue
+    ans += arr[a] + arr[b]
     union(a, b)
-    ans += w
 
 print(ans if ans <= k else 'NO')
 
