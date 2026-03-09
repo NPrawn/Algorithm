@@ -24,12 +24,21 @@ for _ in range(m):
 for i in range(n+1):
     find(i)
 
-ans = 0
+lst = []
 for i in range(2, n+1):
     a = find(1)
     b = find(i)
     if a == b: continue
-    ans += arr[a]+arr[b]
-    union(a, i)
+    lst.append((arr[b] + arr[a], i))
+
+lst.sort()
+
+ans = 0
+for v, i in lst:
+    a = find(1)
+    b = find(i)
+    if a==b: continue
+    union(1, i)
+    ans += v
 
 print(ans if ans <= k else 'NO')
