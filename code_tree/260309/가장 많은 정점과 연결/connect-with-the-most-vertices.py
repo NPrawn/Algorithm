@@ -24,20 +24,16 @@ for _ in range(m):
 for i in range(n+1):
     find(i)
 
-lst = []
-for i in range(2, n+1):
-    a = find(1)
-    b = find(i)
-    if a == b: continue
-    lst.append((arr[b] + arr[a], i))
-
-lst.sort()
 ans = 0
-for v, i in lst:
-    a = find(1)
-    b = find(i)
-    if a==b: continue
-    union(a, b)
-    ans += v
+s = set()
+mn = float('inf')
+for e in p[1:]:
+    a = find(e)
+    if a in s: continue
+    s.add(a)
+    ans += arr[a]
+    mx = min(mn, arr[a])
 
+if len(s) % 2 == 1:
+    ans += mn
 print(ans if ans <= k else 'NO')
