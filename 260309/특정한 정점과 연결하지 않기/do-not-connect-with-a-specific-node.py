@@ -34,7 +34,7 @@ for i in range(1, n+1):
         lst.append((ct[find(i)],i))
 
 lst.sort(reverse=True)
-ans = ct[a]
+ans = ct[find(a)]
 for cnt, i in lst:
     if (k==0): break
     if (find(i) == find(a)): continue
