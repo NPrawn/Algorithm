@@ -1,46 +1,34 @@
 import java.io.*;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
 
-    static class pair implements Comparable<pair> {
-        int start;
-        int end;
-
-        @Override
-        public int compareTo(pair other) {
-            if (this.end == other.end) {
-                return this.start - other.start;
-            }
-            return this.end - other.end;
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        int n = Integer.parseInt(br.readLine());
-        pair[] s = new pair[n];
+    public static void main(String[] args) throws Exception {
+        int n = Integer.parseInt(input.readLine());
+        int[][] arr = new int[n][2];
         for (int i = 0; i < n; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            s[i] = new pair();
-            s[i].start = Integer.parseInt(st.nextToken());
-            s[i].end = Integer.parseInt(st.nextToken());
+            st = new StringTokenizer(input.readLine());
+            arr[i][0] = Integer.parseInt(st.nextToken());
+            arr[i][1] = Integer.parseInt(st.nextToken());
         }
-        Arrays.sort(s);
 
-        int t = 0;
+        Arrays.sort(arr, (a, b) -> {
+            if (a[1] == b[1])
+                return a[0] - b[0];
+            return a[1] - b[1];
+        });
         int ans = 0;
-        for (int i = 0; i < n; i++) {
-            if (t > s[i].start) continue;
-            ans++;
-            t = s[i].end;
+        int t = 0;
+        for (int[] item : arr) {
+            if (t <= item[0]) {
+                t = item[1];
+                ans += 1;
+            }
         }
 
-        sb.append(ans);
-        bw.write(sb.toString());
-        bw.close();
+        System.out.println(ans);
     }
 }
