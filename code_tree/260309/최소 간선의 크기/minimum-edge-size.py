@@ -15,7 +15,7 @@ def union(a, b):
     a = find(a)
     b = find(b)
     
-    if p[a] < p[b]:
+    if a < b:
         p[a] = b
     else:
         p[b] = a
