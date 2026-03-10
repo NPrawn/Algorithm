@@ -12,10 +12,7 @@ def union(a, b):
     a = find(a)
     b = find(b)
 
-    if a > b:
-        p[a] = b
-    else:
-        p[b] = a
+    p[a] = b
 
 for _ in range(m):
     cmd = list(map(int, input().split()))
