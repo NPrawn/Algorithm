@@ -1,59 +1,63 @@
 from collections import deque
 
 def solution(n, infection, edges, k):
-    graph = [[] for _ in range(n + 1)]
+    g = [[] for _ in range(n)]
     for x, y, t in edges:
-        graph[x].append((y, t))
-        graph[y].append((x, t))
+        x -= 1
+        y -= 1
+        t -= 1
+        g[x].append((y, t))
+        g[y].append((x, t))
 
-    answer = 1
+    comps = [[] for _ in range(3)]
 
-    def spread(infected, pipe_type):
-        next_infected = infected[:]
-        q = deque()
+    for color in range(3):
+        vis = [False] * n
+        for start in range(n):
+            if vis[start]:
+                continue
 
-        for i in range(1, n + 1):
-            if next_infected[i]:
-                q.append(i)
+            q = deque([start])
+            vis[start] = True
+            mask = 0
 
-        while q:
-            cur = q.popleft()
+            while q:
+                cur = q.popleft()
+                mask |= (1 << cur)
 
-            for nxt, t in graph[cur]:
-                if t != pipe_type:
-                    continue
-                if next_infected[nxt]:
-                    continue
-                next_infected[nxt] = True
-                q.append(nxt)
+                for nxt, t in g[cur]:
+                    if t != color or vis[nxt]:
+                        continue
+                    vis[nxt] = True
+                    q.append(nxt)
 
-        return next_infected
+            comps[color].append(mask)
 
-    def count_infected(infected):
-        cnt = 0
-        for i in range(1, n + 1):
-            if infected[i]:
-                cnt += 1
-        return cnt
+    def expand(mask, color):
+        nxt = mask
+        for comp in comps[color]:
+            if mask & comp:
+                nxt |= comp
+        return nxt
 
-    def dfs(depth, infected):
-        nonlocal answer
+    best = {}
+    ans = 1
 
-        cnt = count_infected(infected)
-        answer = max(answer, cnt)
+    def dfs(step, mask):
+        nonlocal ans
 
-        if answer == n:
+        if mask in best and best[mask] <= step:
             return
-        if depth == k:
+        best[mask] = step
+
+        ans = max(ans, bin(mask).count('1'))
+        if step == k or ans == n:
             return
 
-        for pipe_type in range(1, 4):
-            next_infected = spread(infected, pipe_type)
-            dfs(depth + 1, next_infected)
+        for color in range(3):
+            nxt = expand(mask, color)
+            if nxt != mask:
+                dfs(step + 1, nxt)
 
-    infected = [False] * (n + 1)
-    infected[infection] = True
-
-    dfs(0, infected)
-
-    return answer
+    dfs(0, 1 << (infection - 1))
+    return ans
