@@ -1,60 +1,43 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        String s = br.readLine();
+    static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
 
-        while (!s.equals(".")) {
-            boolean error = false;
-            Stack<Character> stack = new Stack<>();
-            for (int i = 0; i < s.length(); i++) {
-                char c = s.charAt(i);
-                if (c == ')') {
-                    if (stack.empty()) {
-                        error = true;
-                        break;
-                    } else if (stack.peek() != '(') {
-                        error = true;
-                        break;
-                    } else {
-                        stack.pop();
-                    }
-                }
-                if (c == ']') {
-                    if (stack.empty()) {
-                        error = true;
-                        break;
-                    } else if (stack.peek() != '[') {
-                        error = true;
-                        break;
-                    } else {
-                        stack.pop();
-                    }
-                }
+    public static void main(String[] args) throws Exception {
+        while (true) {
+            String s = input.readLine();
+            boolean check = true;
+            if (s.equals(".")) break;
+            ArrayDeque<Character> dq = new ArrayDeque<>();
+            for (char c : s.toCharArray()) {
                 if (c == '(') {
-                    stack.push(c);
+                    dq.offerLast(c);
+                } else if (c == '[')
+                    dq.offerLast(c);
+                else if ( c == ')') {
+                    if (!dq.isEmpty() && dq.peekLast() == '(')
+                        dq.pollLast();
+                    else {
+                        check = false;
+                        break;
+                    }
+                } else if (c == ']') {
+                    if (!dq.isEmpty() && dq.peekLast() == '[')
+                        dq.pollLast();
+                    else {
+                        check = false;
+                        break;
+                    }
                 }
-                if (c == '[') {
-                    stack.push(c);
-                }
             }
-            if (!stack.empty()) {
-                error = true;
-            }
-            if (error) {
-                bw.write("no\n");
-            } else {
-                bw.write("yes\n");
-            }
-
-            s = br.readLine();
+            if (!dq.isEmpty()) check = false;
+            sb.append(check ? "yes" : "no").append("\n");
         }
 
-        br.close();
-        bw.close();
+        System.out.println(sb.toString());
     }
 }

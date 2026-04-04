@@ -1,0 +1,60 @@
+# --- local/temporary stuff ---
+_Temp/
+temp.py
+
+# --- IDE settings ---
+.idea/
+
+# --- git internal directory (원래 Git이 추적하지 않지만, 명시해도 무방) ---
+.git/
+
+########################
+# OS / Editor clutter
+########################
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+########################
+# Python artifacts
+########################
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+
+########################
+# Java / Gradle / IntelliJ build outputs
+########################
+*.class
+*.log
+
+# IntelliJ (이미 .idea/ 넣었으면 OK)
+*.iml
+out/
+
+# Gradle
+.gradle/
+build/
+
+# Maven
+target/
+
+########################
+# Competitive programming junk
+########################
+*.tmp
+*.swp
+*.swo
+*.bak
+*.orig
+
+# If you generate input/output locally
+input.txt
+output.txt
