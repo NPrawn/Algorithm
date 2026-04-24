@@ -3,8 +3,8 @@ using namespace std;
 
 struct Graph {
     int head[100005];
-    int to[100005];
-    int nxt[100005];
+    int to[200005];
+    int nxt[200005];
     int cnt;
 
     void init(int n) {
