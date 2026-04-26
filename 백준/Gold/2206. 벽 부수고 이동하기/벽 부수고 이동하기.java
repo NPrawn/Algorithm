@@ -1,88 +1,58 @@
 import java.io.*;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    public static class Point {
-        public int x;
-        public int y;
-        public int z;
+	static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+	static StringBuilder sb = new StringBuilder();
+	static StringTokenizer st;
 
-        public Point(int x, int y, int z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-    }
+	public static void main(String[] args) throws Exception {
+		int[] dx = { 1, 0, -1, 0 };
+		int[] dy = { 0, 1, 0, -1 };
+		st = new StringTokenizer(input.readLine());
+		int n = Integer.parseInt(st.nextToken());
+		int m = Integer.parseInt(st.nextToken());
+		int[][] grid = new int[n][m];
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		for (int x = 0; x < n; x++) {
+			String s = input.readLine();
+			for (int y = 0; y < m; y++) {
+				grid[x][y] = s.charAt(y) - '0';
+			}
+		}
 
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
-        int result = -1;
-        int[] dx = {1, -1, 0, 0};
-        int[] dy = {0, 0, 1, -1};
-        int[][][] board = new int[2][n][m];
-        int[][][] dist = new int[2][n][m];
-        Queue<Point> que = new LinkedList<>();
+		int[][][] dist = new int[n][m][2];
+		dist[0][0][0] = 1;
+		ArrayDeque<int[]> dq = new ArrayDeque<>();
+		dq.add(new int[] { 0, 0, 0 });
 
+		while (!dq.isEmpty()) {
+			int[] now = dq.pollFirst();
+			int x = now[0];
+			int y = now[1];
+			int k = now[2];
+			for (int d = 0; d < 4; d++) {
+				int nx = x + dx[d];
+				int ny = y + dy[d];
+				if (nx < 0 || ny < 0 || nx >= n || ny >= m)
+					continue;
+				if (dist[nx][ny][k] != 0)
+					continue;
+				if (grid[nx][ny] == 1 && k == 0) {
+					dist[nx][ny][1] = dist[x][y][k] + 1;
+					dq.add(new int[] { nx, ny, 1 });
+				}
+				if (grid[nx][ny] == 1) continue;
+				dist[nx][ny][k] = dist[x][y][k] + 1;
+				dq.add(new int[] {nx,ny,k});
+			}
+		}
+		
+		int a = dist[n-1][m-1][0];
+		int b = dist[n-1][m-1][1];
+		int ans = Math.min(a == 0 ? Integer.MAX_VALUE : a, b==0 ? Integer.MAX_VALUE : b);
+		System.out.println(ans == Integer.MAX_VALUE ? -1 : ans);
+		
 
-
-        for (int i = 0; i < n; i++) {
-            String s = br.readLine();
-            for (int j = 0; j < m; j++) {
-                board[0][i][j] = s.charAt(j) - '0';
-                board[1][i][j] = s.charAt(j) - '0';
-            }
-        }
-
-        que.add(new Point(0, 0, 0));
-        dist[0][0][0] = 1;
-
-        while (!que.isEmpty()) {
-            Point cur = que.poll();
-            if (cur.x == n - 1 && cur.y == m - 1) {
-                if (dist[0][cur.x][cur.y] == 0) {
-                    result = dist[1][cur.x][cur.y];
-                } else if (dist[1][cur.x][cur.y] == 0) {
-                    result = dist[0][cur.x][cur.y];
-                } else {
-                    result = Math.min(dist[0][cur.x][cur.y], dist[1][cur.x][cur.y]);
-                }
-            }
-            for (int dir = 0; dir < 4; dir++) {
-                int nx = cur.x + dx[dir];
-                int ny = cur.y + dy[dir];
-                int nz = cur.z;
-                if (nx < 0 || ny < 0 || nx >= n || ny >= m) {
-                    continue;
-                }
-                if (dist[nz][nx][ny] > 0) {
-                    continue;
-                }
-                if (cur.z == 1 && board[nz][nx][ny] == 1) {
-                    continue;
-                }
-                if (board[nz][nx][ny] == 1) {
-                    dist[1][nx][ny] = dist[cur.z][cur.x][cur.y] + 1;
-                    que.add(new Point(nx, ny, 1));
-                } else {
-                    dist[nz][nx][ny] = dist[nz][cur.x][cur.y] + 1;
-                    /*dist[1][cur.x][cur.y] = dist[0][cur.x][cur.y];*/
-                    que.add(new Point(nx, ny, cur.z));
-                }
-            }
-        }
-
-
-        bw.write(Integer.toString(result) + "\n");
-
-        br.close();
-        bw.close();
-
-    }
+	}
 }

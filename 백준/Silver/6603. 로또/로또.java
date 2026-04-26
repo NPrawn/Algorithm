@@ -1,54 +1,55 @@
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    static int arr[];
-    static int ans[];
+    static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    static StringTokenizer st;
+    static StringBuilder sb = new StringBuilder();
+
     static int n;
-    static boolean isUsed[];
+    static int[] arr;
+    static int[] ans = new int[6];
+    static boolean[] used;
 
-    static void func(int cur) {
-        if (cur == 6) {
-            for (int i = 0; i < 6; i++) {
-                sb.append(ans[i] + " ");
-            }
-            sb.append("\n");
-            return;
-        }
-        for (int i = 0; i < n; i++) {
-            if (isUsed[i]) continue;
-            if (cur != 0 && ans[cur - 1] > arr[i]) continue;
-            isUsed[i] = true;
-            ans[cur] = arr[i];
-            func(cur + 1);
-            isUsed[i] = false;
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         while (true) {
-            sb = new StringBuilder();
-            StringTokenizer st = new StringTokenizer(br.readLine());
+            st = new StringTokenizer(input.readLine());
             n = Integer.parseInt(st.nextToken());
-            if (n == 0) break;
+            if (n == 0) {
+                break;
+            }
+
             arr = new int[n];
-            ans = new int[6];
-            isUsed = new boolean[n];
+            used = new boolean[n];
             for (int i = 0; i < n; i++) {
                 arr[i] = Integer.parseInt(st.nextToken());
             }
 
-            func(0);
-
-            sb.append("\n");
-            bw.write(sb.toString());
+            dfs(0, 0);
+            sb.append('\n');
         }
-
-        br.close();
-        bw.close();
+        System.out.println(sb.toString());
     }
 
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static StringBuilder sb = new StringBuilder();
+    static void dfs(int d, int idx) {
+        if (d == 6) {
+            for (int a : ans) {
+                sb.append(a).append(" ");
+            }
+            sb.append('\n');
+
+            return;
+        }
+
+        for (int i = idx; i < n; i++) {
+            if (used[i]) {
+                continue;
+            }
+
+            used[i] = true;
+            ans[d] = arr[i];
+            dfs(d + 1, i + 1);
+            used[i] = false;
+        }
+    }
 }

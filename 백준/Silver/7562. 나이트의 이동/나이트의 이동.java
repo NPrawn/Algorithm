@@ -1,57 +1,44 @@
-import java.awt.desktop.AboutEvent;
 import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static class Pair {
-        public int x;
-        public int y;
+	static BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+	static StringBuilder sb = new StringBuilder();
+	static StringTokenizer st;
 
-        public Pair(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
+	public static void main(String[] args) throws Exception {
+		int T = Integer.parseInt(input.readLine());
+		int[] dx = { -1, -2, -2, -1, 1, 2, 2, 1 };
+		int[] dy = { -2, -1, 1, 2, 2, 1, -1, -2 };
+		while (T-- > 0) {
+			int n = Integer.parseInt(input.readLine());
+			int[][] dist = new int[n][n];
+			st = new StringTokenizer(input.readLine());
+			int sx = Integer.parseInt(st.nextToken());
+			int sy = Integer.parseInt(st.nextToken());
+			st = new StringTokenizer(input.readLine());
+			int ex = Integer.parseInt(st.nextToken());
+			int ey = Integer.parseInt(st.nextToken());
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
-        int t = Integer.parseInt(br.readLine());
-        while (t-- > 0) {
-            Queue<Pair> que = new LinkedList<>();
-            int n = Integer.parseInt(br.readLine());
-            int[][] board = new int[n][n];
-            int[][] dist = new int[n][n];
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int ansX = Integer.parseInt(st.nextToken());
-            int ansY = Integer.parseInt(st.nextToken());
-            board[ansX][ansY] = 2;
-            st = new StringTokenizer(br.readLine());
-            int q = Integer.parseInt(st.nextToken());
-            int w = Integer.parseInt(st.nextToken());
-            board[q][w] = 1;
-            int[] dx = {2, 2, -2, -2, 1, 1, -1, -1};
-            int[] dy = {1, -1, 1, -1, 2, -2, 2, -2};
-            que.add(new Pair(q, w));
-            while (!que.isEmpty()) {
-                Pair cur = que.poll();
-                if (cur.x == ansX && cur.y == ansY) {
-                    bw.write(dist[cur.x][cur.y] + "\n");
-                    break;
-                }
-                for (int dir = 0; dir < 8; dir++) {
-                    int nx = cur.x + dx[dir];
-                    int ny = cur.y + dy[dir];
-                    if (nx < 0 || ny < 0 || nx >= n || ny >= n) continue;
-                    if (dist[nx][ny] > 0) continue;
-                    que.add(new Pair(nx, ny));
-                    dist[nx][ny] = dist[cur.x][cur.y] + 1;
-                }
-            }
-        }
-
-        br.close();
-        bw.close();
-    }
+			dist[sx][sy] = 1;
+			ArrayDeque<int[]> dq = new ArrayDeque<>();
+			dq.add(new int[] {sx,sy});
+			
+			while (!dq.isEmpty()) {
+				int[] now = dq.pollFirst();
+				int x = now[0];
+				int y = now[1];
+				for (int d=0; d<8; d++) {
+					int nx = x+ dx[d];
+					int ny = y + dy[d];
+					if (nx<0 || ny <0 || nx>=n || ny>=n) continue;
+					if (dist[nx][ny] != 0) continue;
+					dq.add(new int[] {nx,ny});
+					dist[nx][ny] = dist[x][y] + 1;
+				}
+			}
+			
+			System.out.println(dist[ex][ey] - 1);
+		}
+	}
 }
