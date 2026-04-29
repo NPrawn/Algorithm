@@ -1,20 +1,24 @@
+import math
+
 def solution(progresses, speeds):
-    ans = []
+    answer = []
     arr = []
-    for p, s in zip(progresses, speeds):
-        remain = 100-p
-        res = remain // s
-        if remain % s != 0: res += 1
-        arr.append(res)
-    
+    for a, b in zip(progresses, speeds):
+        k = 100 - a
+        arr.append(math.ceil(k / b))
     stk = []
-    t = 0
-    for e in arr:
-        if (stk and t < e):
-            ans.append(len(stk))
-            stk.clear()
-            t = 0
-        stk.append(e)
-        t = max(t, e)
-    ans.append(len(stk))
-    return ans
+    mx = 0
+    for a in arr:
+        if not stk:
+            mx = a
+            stk.append(a)
+        elif stk and a <= mx:
+            stk.append(a)
+        else:
+            answer.append(len(stk))
+            stk = [a]
+            mx = a
+
+    if len(stk) > 0:
+        answer.append(len(stk))
+    return answer
